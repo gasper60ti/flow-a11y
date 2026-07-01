@@ -1,0 +1,10 @@
+count,evidence_strength,status
+150,absent,not_applicable
+29,strong,fail
+151,strong,incomplete
+153,strong,not_applicable
+105,strong,pass
+30,strong,warning
+181,weak,incomplete
+4,weak,not_applicable
+7,weak,warning

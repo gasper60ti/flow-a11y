@@ -1,0 +1,42 @@
+{
+  "dataset_id": "D_dyn_real_legacy",
+  "name": "Legacy real dynamic scenarios with known issues",
+  "baseline_kind": "human_oracle",
+  "description": "Real browser-use task scenarios removed from the active dynamic benchmark set because they previously showed site or scenario stability issues. Kept for inspection and future repair.",
+  "label_review_status": "legacy_known_issues",
+  "scenarios": [
+    {
+      "scenario_id": "real_nasa_navigation_overlay",
+      "scenario_type": "navigation overlay",
+      "target": "https://www.nasa.gov",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://www.nasa.gov, open the main navigation menu, expand a topic or mission submenu, then close the overlay with keyboard controls.",
+      "scripted_steps": [],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 12
+    },
+    {
+      "scenario_id": "real_bbc_homepage_media_controls",
+      "scenario_type": "homepage media controls",
+      "target": "https://www.bbc.com/news",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://www.bbc.com/news, open the first video from the MOST WATCHED section, start playback if available, then inspect whether captions or transcript controls are present.",
+      "scripted_steps": [],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 12
+    },
+    {
+      "scenario_id": "real_youtube_player_captions",
+      "scenario_type": "video player captions and keyboard controls",
+      "target": "https://www.youtube.com",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://www.youtube.com, open the first playable video from the home page or recommendations, then use keyboard controls to reach the player settings or captions control.",
+      "scripted_steps": [],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 12
+    }
+  ]
+}

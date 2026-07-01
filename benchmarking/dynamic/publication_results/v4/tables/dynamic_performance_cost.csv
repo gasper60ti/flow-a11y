@@ -1,0 +1,2 @@
+api_calls,avg_time_s,cache_hits,cost_available,currency,estimated_cost,model,model_calls,note,output_tokens,prompt_tokens,run_id,scenarios,total_time_s,total_tokens
+203,581.247661,0,False,USD,,gemini-2.5-flash,203,Formal dynamic WCAG judge model calls are metered; browser-use orchestration calls are separate.,31083,17102567,run_1,19,11043.705556,17507120

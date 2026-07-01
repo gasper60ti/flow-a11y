@@ -1,0 +1,537 @@
+{
+  "dataset_id": "D_dyn_fixture",
+  "name": "Synthetic dynamic fixture baseline",
+  "baseline_kind": "synthetic_fixture",
+  "description": "Deterministic authored metadata for dynamic WCAG fixture scenarios covering controlled failures and passes.",
+  "scenarios": [
+    {
+      "scenario_id": "keyboard_trap_fail",
+      "scenario_type": "keyboard trap",
+      "target": "benchmarking/fixtures/dynamic/pages/keyboard_trap.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Open the dialog and traverse focus using Tab until focus should leave the widget.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Activate the Open dialog button.",
+        "Press Tab five times and record focus_sequence and keyboard_events."
+      ],
+      "criteria_expected": ["2.1.2"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.1.2",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "focus_sequence repeats the same dialog control after multiple Tab key events",
+            "keyboard_events contains repeated Tab traversal attempts"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "missing_focus_indicator_fail",
+      "scenario_type": "missing focus indicator",
+      "target": "benchmarking/fixtures/dynamic/pages/missing_focus_indicator.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Tab through controls and verify whether each focused element has a visible focus indicator.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Press Tab through all visible controls.",
+        "Capture focus_visible_trace and screenshot_paths for each focused control."
+      ],
+      "criteria_expected": ["2.4.7"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.4.7",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "focus_visible_trace has has_visible_indicator=false for the active button",
+            "screenshot_paths include the focused state with no visible indicator"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "incorrect_focus_order_fail",
+      "scenario_type": "incorrect focus order",
+      "target": "benchmarking/fixtures/dynamic/pages/incorrect_focus_order.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Tab through a checkout form and compare focus movement with the visual and DOM task order.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Press Tab from the first form field through the submit button.",
+        "Record the ordered focus_sequence."
+      ],
+      "criteria_expected": ["2.4.3"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.4.3",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "focus_sequence moves from shipping name to submit before required address fields",
+            "step order does not preserve the meaningful task sequence"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "modal_focus_escape_fail",
+      "scenario_type": "modal focus escaping",
+      "target": "benchmarking/fixtures/dynamic/pages/modal_focus_escape.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Open a modal dialog and verify focus remains inside the active modal content.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Activate the modal trigger.",
+        "Press Tab until focus reaches content behind the modal."
+      ],
+      "criteria_expected": ["2.4.3"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.4.3",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "focus_sequence includes a background page link while the modal remains open",
+            "the focused target is outside the active dialog subtree"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "hover_only_content_fail",
+      "scenario_type": "hover-only content",
+      "target": "benchmarking/fixtures/dynamic/pages/hover_only_content.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Reveal tooltip content with hover and focus and verify dismissibility, hoverability, and persistence.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Hover the help icon.",
+        "Move the pointer onto the revealed content and press Escape.",
+        "Focus the help icon with Tab and record hover_focus_revealed_content."
+      ],
+      "criteria_expected": ["1.4.13"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "1.4.13",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "hover_focus_revealed_content shows content appears only on hover",
+            "has_dismiss_control is false for the revealed content"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "status_message_without_live_region_fail",
+      "scenario_type": "status message without live region",
+      "target": "benchmarking/fixtures/dynamic/pages/status_message_without_live_region.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Submit a form that injects a success message and verify status announcement semantics.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Submit the form.",
+        "Record status_message_mutations and live_region_presence after the success message appears."
+      ],
+      "criteria_expected": ["4.1.3"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "4.1.3",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "status_message_mutations contains the inserted success text",
+            "live_region_presence is false for the injected message container"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "timeout_without_warning_fail",
+      "scenario_type": "timeout without warning",
+      "target": "benchmarking/fixtures/dynamic/pages/timeout_without_warning.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Start an inactivity timeout and verify whether the user receives a warning or extension control.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Wait for the configured timeout threshold.",
+        "Record timing_snapshots, timeout_warnings, and interruption_signals."
+      ],
+      "criteria_expected": ["2.2.6"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.2.6",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "timing_snapshots shows an inactivity deadline",
+            "timeout_warnings remains empty before the session-ending transition"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "form_error_not_announced_fail",
+      "scenario_type": "form error not announced",
+      "target": "benchmarking/fixtures/dynamic/pages/form_error_not_announced.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Submit an invalid form and verify that error identification is visible and announced.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Submit the form with required fields empty.",
+        "Record form_snapshots, error_messages, status_message_mutations, and focus_sequence."
+      ],
+      "criteria_expected": ["3.3.1"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "3.3.1",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "form_snapshots shows an invalid submitted form",
+            "error_messages contains a visual error but no associated field reference or announcement evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "flashing_content_fail",
+      "scenario_type": "flashing content",
+      "target": "benchmarking/fixtures/dynamic/pages/flashing_content.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Trigger a flashing alert and record animation and flash evidence.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Activate the flashing alert control.",
+        "Record flash_events and screenshots."
+      ],
+      "criteria_expected": ["2.3.1"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.3.1",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "flash_events contains an observed strobe/flicker signal",
+            "the fixture is authored above the safe flashing threshold"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "pointer_cancellation_fail",
+      "scenario_type": "pointer cancellation",
+      "target": "benchmarking/fixtures/dynamic/pages/pointer_cancellation.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Use a custom pointer-only button and verify whether the operation can be cancelled before completion.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Trigger pointerdown on the custom control.",
+        "Record pointer_handlers and pointer_cancellation_indicators."
+      ],
+      "criteria_expected": ["2.5.2"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.5.2",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "pointer_handlers contains an onpointerdown activation target",
+            "pointer_cancellation_indicators is empty for the target"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "drag_only_control_fail",
+      "scenario_type": "drag-only control",
+      "target": "benchmarking/fixtures/dynamic/pages/drag_only_control.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Move an item in a drag-only list and verify whether a single-pointer or keyboard alternative exists.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Start a drag interaction on a list item.",
+        "Record dragging_indicators and any keyboard alternative indicators."
+      ],
+      "criteria_expected": ["2.5.7"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.5.7",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "dragging_indicators contains a draggable target",
+            "the fixture has no keyboard alternative for the dragging movement"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "media_captions_missing_fail",
+      "scenario_type": "media captions missing",
+      "target": "benchmarking/fixtures/dynamic/pages/media_captions_missing.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Play a prerecorded video and verify caption track availability.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Start the prerecorded video.",
+        "Record media_elements and caption_tracks."
+      ],
+      "criteria_expected": ["1.2.2"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "1.2.2",
+          "expected_status": "fail",
+          "expected_evidence": [
+            "media_elements contains an audible prerecorded video",
+            "caption_tracks is empty"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "keyboard_navigation_pass",
+      "scenario_type": "keyboard navigation pass",
+      "target": "benchmarking/fixtures/dynamic/pages/keyboard_navigation_pass.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Tab through ordinary controls and verify focus progresses with the keyboard.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Press Tab through multiple controls.",
+        "Record keyboard_events and focus_sequence."
+      ],
+      "criteria_expected": ["2.1.1"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.1.1",
+          "expected_status": "pass",
+          "expected_evidence": [
+            "keyboard_events contains Tab traversal",
+            "focus_sequence advances through multiple controls"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "focus_indicator_pass",
+      "scenario_type": "focus indicator pass",
+      "target": "benchmarking/fixtures/dynamic/pages/focus_indicator_pass.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Tab to the primary action and verify the focused state has a visible outline.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Press Tab to the primary action.",
+        "Record focus_visible_trace and screenshot_paths."
+      ],
+      "criteria_expected": ["2.4.7"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.4.7",
+          "expected_status": "pass",
+          "expected_evidence": [
+            "focus_visible_trace has has_visible_indicator=true",
+            "screenshot_paths contains the focused control state"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "focus_order_pass",
+      "scenario_type": "focus order pass",
+      "target": "benchmarking/fixtures/dynamic/pages/focus_order_pass.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Tab through a form and verify focus follows the meaningful form sequence.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Press Tab through all form controls.",
+        "Record the ordered focus_sequence."
+      ],
+      "criteria_expected": ["2.4.3"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.4.3",
+          "expected_status": "pass",
+          "expected_evidence": [
+            "focus_sequence advances from first input to second input to submit",
+            "the order matches the authored task sequence"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "hover_dismissible_pass",
+      "scenario_type": "hover content pass",
+      "target": "benchmarking/fixtures/dynamic/pages/hover_dismissible_pass.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Reveal a popover from hover and focus and verify a dismiss control is available.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Reveal the popover.",
+        "Record hover_focus_revealed_content."
+      ],
+      "criteria_expected": ["1.4.13"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "1.4.13",
+          "expected_status": "pass",
+          "expected_evidence": [
+            "hover_focus_revealed_content is present",
+            "has_dismiss_control is true for the revealed content"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "status_message_live_region_pass",
+      "scenario_type": "status message pass",
+      "target": "benchmarking/fixtures/dynamic/pages/status_message_live_region_pass.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Submit a form that inserts a status message into a live region.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Submit the form.",
+        "Record status_message_mutations and live_region_presence."
+      ],
+      "criteria_expected": ["4.1.3"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "4.1.3",
+          "expected_status": "pass",
+          "expected_evidence": [
+            "status_message_mutations contains the inserted status text",
+            "live_region_presence is true"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "timeout_warning_pass",
+      "scenario_type": "timeout warning pass",
+      "target": "benchmarking/fixtures/dynamic/pages/timeout_warning_pass.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Start an inactivity timer and verify warning plus extension controls are available.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Wait until the timeout warning appears.",
+        "Record timing_snapshots and timeout_warnings."
+      ],
+      "criteria_expected": ["2.2.6"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.2.6",
+          "expected_status": "pass",
+          "expected_evidence": [
+            "timing_snapshots contains a deadline with user_extend_control=true",
+            "timeout_warnings contains an extend-session warning"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "flashing_below_threshold_pass",
+      "scenario_type": "flashing content pass",
+      "target": "benchmarking/fixtures/dynamic/pages/flashing_below_threshold_pass.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Trigger a below-threshold flashing indicator and verify it is marked safe.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Activate the below-threshold flashing indicator.",
+        "Record flash_events."
+      ],
+      "criteria_expected": ["2.3.1"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.3.1",
+          "expected_status": "pass",
+          "expected_evidence": [
+            "flash_events contains below_threshold=true",
+            "the authored flash rate is within the safe threshold"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "pointer_cancellation_pass",
+      "scenario_type": "pointer cancellation pass",
+      "target": "benchmarking/fixtures/dynamic/pages/pointer_cancellation_pass.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Use a pointer control that activates on pointerup and supports cancellation.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Trigger pointerdown and pointerup on the custom control.",
+        "Record pointer_cancellation_indicators."
+      ],
+      "criteria_expected": ["2.5.2"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.5.2",
+          "expected_status": "pass",
+          "expected_evidence": [
+            "pointer_handlers contains the pointer control",
+            "pointer_cancellation_indicators contains pointerup/cancel evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "dragging_with_keyboard_alternative_pass",
+      "scenario_type": "dragging movement pass",
+      "target": "benchmarking/fixtures/dynamic/pages/dragging_with_keyboard_alternative_pass.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Move an item with drag and verify keyboard alternative controls are present.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Inspect draggable list items and keyboard move buttons.",
+        "Record dragging_indicators."
+      ],
+      "criteria_expected": ["2.5.7"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "2.5.7",
+          "expected_status": "pass",
+          "expected_evidence": [
+            "dragging_indicators contains draggable targets",
+            "each dragging indicator has has_keyboard_alternative=true"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "media_captions_present_pass",
+      "scenario_type": "media captions pass",
+      "target": "benchmarking/fixtures/dynamic/pages/media_captions_present_pass.html",
+      "interaction_type": "playwright_script",
+      "task_description": "Play a prerecorded video and verify caption tracks are present.",
+      "scripted_steps": [
+        "Open the fixture page.",
+        "Start the prerecorded video.",
+        "Record media_elements and caption_tracks."
+      ],
+      "criteria_expected": ["1.2.2"],
+      "baseline_kind": "synthetic_fixture",
+      "expected_results": [
+        {
+          "criterion_id": "1.2.2",
+          "expected_status": "pass",
+          "expected_evidence": [
+            "media_elements contains an audible prerecorded video",
+            "caption_tracks contains a captions track"
+          ]
+        }
+      ]
+    }
+  ]
+}

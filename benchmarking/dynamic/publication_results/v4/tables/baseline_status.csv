@@ -1,0 +1,5 @@
+available,baseline_id,kind,name,reason,status
+True,synthetic-fixture,synthetic_fixture,Synthetic dynamic fixture oracle,authored synthetic fixture oracle is available as D_dyn_fixture,available
+True,human-oracle,human_oracle,Human-labelled dynamic scenario oracle,human oracle labels are loaded from the external real oracle file for metrics,available
+True,gemini-dynamic-wcag,gemini_dynamic_wcag,Gemini dynamic WCAG judge,computed from formal analyzer Gemini dynamic WCAG prompts,completed
+True,naive-browser-use-global-audit,naive_browser_use_global_audit,Naive browser-use global accessibility audit,completed single generic browser-use accessibility audit,completed

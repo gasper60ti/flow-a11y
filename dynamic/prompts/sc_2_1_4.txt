@@ -1,0 +1,61 @@
+You are verifying WCAG success criterion 2.1.4 (Character Key Shortcuts) from runtime probe evidence.
+
+Criterion contract:
+- criterion id: 2.1.4
+- criterion name: Character Key Shortcuts
+- probe: keyboard_focus_probe
+- required evidence keys: character_key_shortcuts, keyboard_events
+- Evidence JSON is the only source of truth. Use only keys, arrays, step numbers, URLs, paths, screenshots, and values present in it.
+
+Decision rules:
+1. Return strict JSON only. Do not include markdown, comments, explanatory prose, trailing commas, or extra top-level fields.
+2. Do not invent evidence, user actions, DOM nodes, screenshots, media states, focus behavior, timing behavior, pointer behavior, form submissions, status announcements, or page states.
+3. Fail only with direct evidence: use "fail" only when listed evidence directly proves this criterion applies and directly proves non-compliance.
+4. Use "pass" only when relevant runtime features were observed and the evidence directly demonstrates compliance for all observed candidates.
+5. Use "warning" when evidence suggests a real risk but does not directly prove a violation.
+6. Use "not_applicable" when no relevant runtime feature was observed for this criterion.
+7. Use "incomplete" when required evidence is absent, empty when it should not be, unusable, contradictory, or too weak to decide.
+8. Do not use generic page text, class names, script text, or suspicious words as proof of visual behavior, dynamic behavior, timing behavior, media state, focus behavior, pointer behavior, or assistive-technology announcement.
+9. Downgrade weak keyword, class-name, static DOM, or script-only signals to "warning" or "incomplete"; do not convert them into "fail".
+10. Every fail or warning violation must include non-empty evidence_refs. Each evidence_refs entry must point to an exact key or nested path present in the Evidence JSON, such as focus_sequence[0].xpath, keyboard_events[1], screenshot_paths[0], status_message_mutations[0].mutation, or media_elements[0].
+11. If an evidence ref cannot be located in the Evidence JSON, do not use it. If no exact evidence_refs can support a fail or warning, return incomplete with violations: [].
+12. Violations must map only to criterion 2.1.4 (Character Key Shortcuts); do not report issues for other WCAG criteria.
+
+Allowed statuses:
+- pass
+- fail
+- warning
+- not_applicable
+- incomplete
+
+Keyboard and focus guidance:
+- Do not fail focus appearance from body focus or missing inline styles alone.
+- Do not treat class names such as focus, active, selected, hidden, or outline as proof without supporting focus_sequence, keyboard_events, focus_visible_trace, focus_obscured_trace, or screenshot_paths entries.
+- For focus visibility or focus appearance, a false has_visible_indicator value is a candidate signal; fail only when the listed trace or screenshot evidence directly supports invisible, insufficient, or obscured focus.
+- For keyboard operability, traps, focus order, or context changes, require observed keyboard_events and step-by-step focus_sequence evidence. A single focused element or a body/html focus target is warning or incomplete unless the trap or failure is directly shown.
+
+Output schema:
+{
+  "criterion_id": "2.1.4",
+  "status": "pass|fail|warning|not_applicable|incomplete",
+  "summary": "one concise evidence-grounded sentence",
+  "missing_evidence": ["required_evidence_key_or_nested_path"],
+  "violations": [
+    {
+      "title": "short violation or risk title",
+      "summary": "why the cited evidence directly proves or suggests a 2.1.4 issue",
+      "severity": "info|low|medium|high|critical",
+      "evidence_refs": ["exact_key_or_nested_path_present_in_evidence_json"]
+    }
+  ]
+}
+
+Field requirements:
+- criterion_id must be exactly "2.1.4".
+- status must be one of pass, fail, warning, not_applicable, incomplete.
+- missing_evidence must list only required evidence keys or nested paths that are missing or unusable; otherwise use [].
+- violations must be [] for pass, not_applicable, or incomplete.
+- violations may be non-empty only for fail or warning, and every item must include title, summary, severity, and non-empty evidence_refs.
+
+Evidence JSON:
+{{EVIDENCE}}
