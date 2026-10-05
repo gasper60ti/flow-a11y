@@ -1,4 +1,4 @@
-"""Dynamic-only benchmark dispatcher."""
+"""Dynamic benchmark dispatcher."""
 
 from __future__ import annotations
 
@@ -11,9 +11,8 @@ from typing import Any
 from benchmarking.dynamic.run_dynamic_benchmark import DEFAULT_RESULTS_DIR as DYNAMIC_RESULTS_DIR
 from benchmarking.dynamic.run_dynamic_benchmark import run_dynamic_benchmark
 
-# Static and combined benchmark imports are intentionally disabled on the
-# dynamic-only branch so this dispatcher stays importable after removing the
-# static source tree.
+# Static and combined benchmark imports are omitted because this artifact
+# distributes the dynamic benchmark implementation.
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -31,7 +30,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--dynamic-criteria-scope", choices=["scenario", "all-prompts"], default="scenario")
     parser.add_argument(
         "--comparison-baseline",
-        choices=["naive-browser-use-global-audit", "none"],
+        choices=[
+            "naive-browser-use-global-audit",
+            "baseline-2.0-matched-trace-generic-judge",
+            "baseline-3.0-matched-global-evidence-ablation",
+            "none",
+        ],
         default="naive-browser-use-global-audit",
     )
     parser.add_argument("--baseline-max-steps", type=int, default=None)

@@ -10,8 +10,7 @@ def test_benchmarking_dynamic_only_layout_is_documented() -> None:
 
     assert (root / "dynamic").exists()
     assert f"{root}/dynamic/" in readme
-
-    assert "benchmarking/dynamic/publication_results/v4/" in readme
+    assert "benchmarking/dynamic/publication_results/v5/" in readme
     assert "--mode dynamic" in readme
     assert "--mode static" not in readme
     assert "--mode both" not in readme

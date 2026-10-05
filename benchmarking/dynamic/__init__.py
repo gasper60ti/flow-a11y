@@ -1,1 +1,1 @@
-"""Dynamic-only benchmark package for the split benchmarking layout."""
+"""Dynamic benchmark package for the artifact layout."""

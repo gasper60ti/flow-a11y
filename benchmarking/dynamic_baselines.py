@@ -1,8 +1,9 @@
 """Dynamic benchmark baseline declarations.
 
 This module is intentionally metadata-only. The paper-facing dynamic comparison
-uses FLOW-A11y's dynamic judge against a naive browser-use global audit
-ablation. Synthetic fixtures and human labels remain oracle sources only.
+includes a naive browser-use global audit, a generic matched-trace judge, and a
+matched global-evidence ablation. Synthetic fixtures and human labels remain
+oracle sources only.
 """
 
 from __future__ import annotations
@@ -22,6 +23,8 @@ class DynamicBaselineKind(str, Enum):
     GEMINI_DYNAMIC_WCAG = "gemini_dynamic_wcag"
     HYBRID_DYNAMIC_WCAG = "hybrid_dynamic_wcag"
     NAIVE_BROWSER_USE_GLOBAL_AUDIT = "naive_browser_use_global_audit"
+    MATCHED_TRACE_GENERIC_JUDGE = "matched_trace_generic_judge"
+    MATCHED_GLOBAL_EVIDENCE_ABLATION = "matched_global_evidence_ablation"
 
 
 class BaselineAvailabilityStatus(str, Enum):
@@ -103,6 +106,31 @@ NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE = DynamicBaselineSpec(
     notes="Single generic browser-use accessibility task, no scenario script, no per-criterion prompts.",
 )
 
+MATCHED_TRACE_GENERIC_JUDGE_BASELINE = DynamicBaselineSpec(
+    baseline_id="baseline-2.0-matched-trace-generic-judge",
+    name="Baseline 2.0: matched-trace generic WCAG judge",
+    kind=DynamicBaselineKind.MATCHED_TRACE_GENERIC_JUDGE,
+    optional=True,
+    notes=(
+        "Receives the same completed scenario, criterion targets, and runtime trace as FlowA11y, "
+        "but judges a bounded generic rendering of the raw trace without FlowA11y probes, evidence gates, "
+        "criterion evidence packets, or evidence-reference verification."
+    ),
+)
+
+MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE = DynamicBaselineSpec(
+    baseline_id="baseline-3.0-matched-global-evidence-ablation",
+    name="Baseline 3.0: matched global-evidence ablation",
+    kind=DynamicBaselineKind.MATCHED_GLOBAL_EVIDENCE_ABLATION,
+    optional=True,
+    notes=(
+        "Receives the same completed scenario, requested criterion ids, runtime trace, Gemini configuration, "
+        "prompt templates, evidence-gate decisions, and response verification as FlowA11y. "
+        "For each criterion it receives one unfiltered packet containing evidence from every runtime probe, "
+        "rather than FlowA11y's criterion-specific evidence packet."
+    ),
+)
+
 HYBRID_DYNAMIC_WCAG_BASELINE = DynamicBaselineSpec(
     baseline_id="hybrid-dynamic-wcag",
     name="Hybrid dynamic WCAG judge",
@@ -121,6 +149,8 @@ def get_baseline_specs() -> tuple[DynamicBaselineSpec, ...]:
         GEMINI_DYNAMIC_WCAG_BASELINE,
         HYBRID_DYNAMIC_WCAG_BASELINE,
         NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE,
+        MATCHED_TRACE_GENERIC_JUDGE_BASELINE,
+        MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE,
     )
 
 def baseline_availability(spec: DynamicBaselineSpec) -> DynamicBaselineAvailability:

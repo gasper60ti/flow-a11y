@@ -1,0 +1,81 @@
+cohort,cohort_id,run,method,method_id,method_role,not_trigger_reason,count,share_of_not_trigger,share_of_765_rows
+Original naive comparison,naive,Run 1,FlowA11y,gemini-dynamic-wcag,primary,weak_signal,19,0.027417027417027416,0.02483660130718954
+Original naive comparison,naive,Run 1,FlowA11y,gemini-dynamic-wcag,primary,assessed_pass,160,0.23088023088023088,0.20915032679738563
+Original naive comparison,naive,Run 1,FlowA11y,gemini-dynamic-wcag,primary,not_applicable,307,0.443001443001443,0.4013071895424837
+Original naive comparison,naive,Run 1,FlowA11y,gemini-dynamic-wcag,primary,insufficient_evidence,207,0.2987012987012987,0.27058823529411763
+Original naive comparison,naive,Run 1,Naive baseline,naive-browser-use-global-audit,comparator,weak_signal,6,0.0079155672823219,0.00784313725490196
+Original naive comparison,naive,Run 1,Naive baseline,naive-browser-use-global-audit,comparator,assessed_pass,25,0.032981530343007916,0.032679738562091505
+Original naive comparison,naive,Run 1,Naive baseline,naive-browser-use-global-audit,comparator,not_applicable,1,0.0013192612137203166,0.00130718954248366
+Original naive comparison,naive,Run 1,Naive baseline,naive-browser-use-global-audit,comparator,insufficient_evidence,726,0.9577836411609498,0.9490196078431372
+Original naive comparison,naive,Run 2,FlowA11y,gemini-dynamic-wcag,primary,weak_signal,33,0.04874446085672083,0.043137254901960784
+Original naive comparison,naive,Run 2,FlowA11y,gemini-dynamic-wcag,primary,assessed_pass,157,0.23190546528803546,0.20522875816993463
+Original naive comparison,naive,Run 2,FlowA11y,gemini-dynamic-wcag,primary,not_applicable,272,0.4017725258493353,0.35555555555555557
+Original naive comparison,naive,Run 2,FlowA11y,gemini-dynamic-wcag,primary,insufficient_evidence,215,0.3175775480059084,0.28104575163398693
+Original naive comparison,naive,Run 2,Naive baseline,naive-browser-use-global-audit,comparator,weak_signal,1,0.0013089005235602095,0.00130718954248366
+Original naive comparison,naive,Run 2,Naive baseline,naive-browser-use-global-audit,comparator,assessed_pass,39,0.051047120418848166,0.050980392156862744
+Original naive comparison,naive,Run 2,Naive baseline,naive-browser-use-global-audit,comparator,not_applicable,0,0.0,0.0
+Original naive comparison,naive,Run 2,Naive baseline,naive-browser-use-global-audit,comparator,insufficient_evidence,724,0.9476439790575916,0.9464052287581699
+Original naive comparison,naive,Run 3,FlowA11y,gemini-dynamic-wcag,primary,weak_signal,27,0.04011887072808321,0.03529411764705882
+Original naive comparison,naive,Run 3,FlowA11y,gemini-dynamic-wcag,primary,assessed_pass,152,0.22585438335809807,0.19869281045751633
+Original naive comparison,naive,Run 3,FlowA11y,gemini-dynamic-wcag,primary,not_applicable,281,0.4175334323922734,0.3673202614379085
+Original naive comparison,naive,Run 3,FlowA11y,gemini-dynamic-wcag,primary,insufficient_evidence,213,0.3164933135215453,0.2784313725490196
+Original naive comparison,naive,Run 3,Naive baseline,naive-browser-use-global-audit,comparator,weak_signal,5,0.006613756613756613,0.006535947712418301
+Original naive comparison,naive,Run 3,Naive baseline,naive-browser-use-global-audit,comparator,assessed_pass,33,0.04365079365079365,0.043137254901960784
+Original naive comparison,naive,Run 3,Naive baseline,naive-browser-use-global-audit,comparator,not_applicable,3,0.003968253968253968,0.00392156862745098
+Original naive comparison,naive,Run 3,Naive baseline,naive-browser-use-global-audit,comparator,insufficient_evidence,715,0.9457671957671958,0.934640522875817
+Original naive comparison,naive,Run 4,FlowA11y,gemini-dynamic-wcag,primary,weak_signal,18,0.026277372262773723,0.023529411764705882
+Original naive comparison,naive,Run 4,FlowA11y,gemini-dynamic-wcag,primary,assessed_pass,157,0.2291970802919708,0.20522875816993463
+Original naive comparison,naive,Run 4,FlowA11y,gemini-dynamic-wcag,primary,not_applicable,281,0.41021897810218977,0.3673202614379085
+Original naive comparison,naive,Run 4,FlowA11y,gemini-dynamic-wcag,primary,insufficient_evidence,229,0.3343065693430657,0.29934640522875816
+Original naive comparison,naive,Run 4,Naive baseline,naive-browser-use-global-audit,comparator,weak_signal,3,0.003937007874015748,0.00392156862745098
+Original naive comparison,naive,Run 4,Naive baseline,naive-browser-use-global-audit,comparator,assessed_pass,29,0.03805774278215223,0.03790849673202614
+Original naive comparison,naive,Run 4,Naive baseline,naive-browser-use-global-audit,comparator,not_applicable,0,0.0,0.0
+Original naive comparison,naive,Run 4,Naive baseline,naive-browser-use-global-audit,comparator,insufficient_evidence,730,0.958005249343832,0.954248366013072
+Baseline 2.0 matched trace,baseline_2,Run 1,FlowA11y,gemini-dynamic-wcag,primary,weak_signal,32,0.04597701149425287,0.04183006535947712
+Baseline 2.0 matched trace,baseline_2,Run 1,FlowA11y,gemini-dynamic-wcag,primary,assessed_pass,161,0.23132183908045978,0.21045751633986928
+Baseline 2.0 matched trace,baseline_2,Run 1,FlowA11y,gemini-dynamic-wcag,primary,not_applicable,277,0.39798850574712646,0.36209150326797385
+Baseline 2.0 matched trace,baseline_2,Run 1,FlowA11y,gemini-dynamic-wcag,primary,insufficient_evidence,226,0.32471264367816094,0.2954248366013072
+Baseline 2.0 matched trace,baseline_2,Run 1,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,weak_signal,0,0.0,0.0
+Baseline 2.0 matched trace,baseline_2,Run 1,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,assessed_pass,154,0.22158273381294963,0.20130718954248367
+Baseline 2.0 matched trace,baseline_2,Run 1,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,not_applicable,419,0.6028776978417266,0.5477124183006536
+Baseline 2.0 matched trace,baseline_2,Run 1,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,insufficient_evidence,122,0.17553956834532375,0.15947712418300652
+Baseline 2.0 matched trace,baseline_2,Run 2,FlowA11y,gemini-dynamic-wcag,primary,weak_signal,22,0.03216374269005848,0.02875816993464052
+Baseline 2.0 matched trace,baseline_2,Run 2,FlowA11y,gemini-dynamic-wcag,primary,assessed_pass,148,0.21637426900584794,0.1934640522875817
+Baseline 2.0 matched trace,baseline_2,Run 2,FlowA11y,gemini-dynamic-wcag,primary,not_applicable,291,0.42543859649122806,0.3803921568627451
+Baseline 2.0 matched trace,baseline_2,Run 2,FlowA11y,gemini-dynamic-wcag,primary,insufficient_evidence,223,0.3260233918128655,0.29150326797385623
+Baseline 2.0 matched trace,baseline_2,Run 2,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,weak_signal,0,0.0,0.0
+Baseline 2.0 matched trace,baseline_2,Run 2,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,assessed_pass,150,0.21367521367521367,0.19607843137254902
+Baseline 2.0 matched trace,baseline_2,Run 2,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,not_applicable,408,0.5811965811965812,0.5333333333333333
+Baseline 2.0 matched trace,baseline_2,Run 2,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,insufficient_evidence,144,0.20512820512820512,0.18823529411764706
+Baseline 2.0 matched trace,baseline_2,Run 3,FlowA11y,gemini-dynamic-wcag,primary,weak_signal,21,0.03025936599423631,0.027450980392156862
+Baseline 2.0 matched trace,baseline_2,Run 3,FlowA11y,gemini-dynamic-wcag,primary,assessed_pass,161,0.23198847262247838,0.21045751633986928
+Baseline 2.0 matched trace,baseline_2,Run 3,FlowA11y,gemini-dynamic-wcag,primary,not_applicable,293,0.42219020172910665,0.38300653594771245
+Baseline 2.0 matched trace,baseline_2,Run 3,FlowA11y,gemini-dynamic-wcag,primary,insufficient_evidence,219,0.31556195965417866,0.28627450980392155
+Baseline 2.0 matched trace,baseline_2,Run 3,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,weak_signal,0,0.0,0.0
+Baseline 2.0 matched trace,baseline_2,Run 3,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,assessed_pass,166,0.23714285714285716,0.2169934640522876
+Baseline 2.0 matched trace,baseline_2,Run 3,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,not_applicable,393,0.5614285714285714,0.5137254901960784
+Baseline 2.0 matched trace,baseline_2,Run 3,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,insufficient_evidence,141,0.20142857142857143,0.1843137254901961
+Baseline 3.0 global-evidence ablation,baseline_3,Run 1,FlowA11y,gemini-dynamic-wcag,primary,weak_signal,26,0.03762662807525326,0.03398692810457516
+Baseline 3.0 global-evidence ablation,baseline_3,Run 1,FlowA11y,gemini-dynamic-wcag,primary,assessed_pass,149,0.21562952243125905,0.19477124183006536
+Baseline 3.0 global-evidence ablation,baseline_3,Run 1,FlowA11y,gemini-dynamic-wcag,primary,not_applicable,296,0.4283646888567294,0.3869281045751634
+Baseline 3.0 global-evidence ablation,baseline_3,Run 1,FlowA11y,gemini-dynamic-wcag,primary,insufficient_evidence,220,0.3183791606367583,0.2875816993464052
+Baseline 3.0 global-evidence ablation,baseline_3,Run 1,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,weak_signal,14,0.020618556701030927,0.018300653594771243
+Baseline 3.0 global-evidence ablation,baseline_3,Run 1,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,assessed_pass,170,0.2503681885125184,0.2222222222222222
+Baseline 3.0 global-evidence ablation,baseline_3,Run 1,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,not_applicable,316,0.4653902798232695,0.4130718954248366
+Baseline 3.0 global-evidence ablation,baseline_3,Run 1,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,insufficient_evidence,179,0.26362297496318116,0.23398692810457516
+Baseline 3.0 global-evidence ablation,baseline_3,Run 2,FlowA11y,gemini-dynamic-wcag,primary,weak_signal,26,0.03784570596797671,0.03398692810457516
+Baseline 3.0 global-evidence ablation,baseline_3,Run 2,FlowA11y,gemini-dynamic-wcag,primary,assessed_pass,153,0.22270742358078602,0.2
+Baseline 3.0 global-evidence ablation,baseline_3,Run 2,FlowA11y,gemini-dynamic-wcag,primary,not_applicable,282,0.4104803493449782,0.3686274509803922
+Baseline 3.0 global-evidence ablation,baseline_3,Run 2,FlowA11y,gemini-dynamic-wcag,primary,insufficient_evidence,226,0.3289665211062591,0.2954248366013072
+Baseline 3.0 global-evidence ablation,baseline_3,Run 2,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,weak_signal,13,0.01897810218978102,0.01699346405228758
+Baseline 3.0 global-evidence ablation,baseline_3,Run 2,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,assessed_pass,159,0.2321167883211679,0.20784313725490197
+Baseline 3.0 global-evidence ablation,baseline_3,Run 2,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,not_applicable,311,0.454014598540146,0.4065359477124183
+Baseline 3.0 global-evidence ablation,baseline_3,Run 2,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,insufficient_evidence,202,0.2948905109489051,0.26405228758169935
+Baseline 3.0 global-evidence ablation,baseline_3,Run 3,FlowA11y,gemini-dynamic-wcag,primary,weak_signal,32,0.04630969609261939,0.04183006535947712
+Baseline 3.0 global-evidence ablation,baseline_3,Run 3,FlowA11y,gemini-dynamic-wcag,primary,assessed_pass,151,0.21852387843704776,0.19738562091503267
+Baseline 3.0 global-evidence ablation,baseline_3,Run 3,FlowA11y,gemini-dynamic-wcag,primary,not_applicable,286,0.41389290882778584,0.3738562091503268
+Baseline 3.0 global-evidence ablation,baseline_3,Run 3,FlowA11y,gemini-dynamic-wcag,primary,insufficient_evidence,222,0.32127351664254705,0.2901960784313726
+Baseline 3.0 global-evidence ablation,baseline_3,Run 3,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,weak_signal,10,0.014577259475218658,0.013071895424836602
+Baseline 3.0 global-evidence ablation,baseline_3,Run 3,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,assessed_pass,177,0.25801749271137026,0.23137254901960785
+Baseline 3.0 global-evidence ablation,baseline_3,Run 3,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,not_applicable,320,0.46647230320699706,0.41830065359477125
+Baseline 3.0 global-evidence ablation,baseline_3,Run 3,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,insufficient_evidence,179,0.260932944606414,0.23398692810457516

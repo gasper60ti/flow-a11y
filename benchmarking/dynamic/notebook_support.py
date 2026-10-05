@@ -55,9 +55,11 @@ def resolve_dynamic_results_dir(
     Resolution order:
     1. explicit ``requested`` path;
     2. ``DYNAMIC_RESULTS_DIR`` environment variable;
-    3. bundled ``publication_results/v4`` artifact;
-    4. newest ``results*`` directory with a ``tables`` subdirectory;
-    5. ``<notebook_dir>/results``.
+    3. newest ``results*`` directory with a ``tables`` subdirectory;
+    4. ``<notebook_dir>/results``.
+
+    The reviewer-facing binary analysis uses
+    ``publication_binary_analysis.py`` rather than this live-run helper.
     """
 
     base_dir = Path(notebook_dir or Path.cwd())
@@ -72,10 +74,6 @@ def resolve_dynamic_results_dir(
         if not configured_path.is_absolute():
             configured_path = base_dir / configured_path
         return configured_path
-
-    publication_results = base_dir / "publication_results" / "v4"
-    if (publication_results / "tables").is_dir():
-        return publication_results
 
     candidates = [
         path

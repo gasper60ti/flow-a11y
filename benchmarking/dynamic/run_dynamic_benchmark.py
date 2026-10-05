@@ -1,4 +1,4 @@
-"""Run dynamic-only WCAG benchmarking for FLOW-A11y."""
+"""Run dynamic WCAG benchmarking for FlowA11y."""
 
 from __future__ import annotations
 
@@ -32,12 +32,16 @@ from benchmarking.dynamic_baselines import (
     GEMINI_DYNAMIC_WCAG_BASELINE,
     HUMAN_ORACLE_BASELINE,
     HYBRID_DYNAMIC_WCAG_BASELINE,
+    MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE,
+    MATCHED_TRACE_GENERIC_JUDGE_BASELINE,
     NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE,
     RULES_DYNAMIC_WCAG_BASELINE,
     SYNTHETIC_FIXTURE_BASELINE,
     get_baseline_specs,
 )
 from benchmarking.dynamic.naive_browser_use_baseline import run_naive_browser_use_baseline
+from benchmarking.dynamic.matched_global_evidence_baseline import run_matched_global_evidence_ablation
+from benchmarking.dynamic.matched_trace_baseline import run_matched_trace_generic_judge
 from benchmarking.config import (
     DEFAULT_GEMINI_MAX_RETRIES,
     DEFAULT_GEMINI_RETRY_BASE_S,
@@ -198,7 +202,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--comparison-baseline",
-        choices=[NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id, "none"],
+        choices=[
+            NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id,
+            MATCHED_TRACE_GENERIC_JUDGE_BASELINE.baseline_id,
+            MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id,
+            "none",
+        ],
         default=NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id,
         help="Paper-facing dynamic comparison baseline.",
     )
@@ -298,15 +307,35 @@ async def run_dynamic_benchmark(args: argparse.Namespace) -> dict[str, Any]:
         getattr(args, "comparison_baseline", NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id)
         or NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id
     )
-    if comparison_baseline not in {NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id, "none"}:
+    if comparison_baseline not in {
+        NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id,
+        MATCHED_TRACE_GENERIC_JUDGE_BASELINE.baseline_id,
+        MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id,
+        "none",
+    }:
         raise ValueError(f"Unsupported dynamic comparison baseline: {comparison_baseline}")
+    if comparison_baseline == MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id and judge_mode != "gemini":
+        raise ValueError("Baseline 3.0 requires --dynamic-judge gemini so it shares FlowA11y's Gemini judgment path.")
+
+    matched_trace_model_client = None
+    uses_matched_comparison = comparison_baseline in {
+        MATCHED_TRACE_GENERIC_JUDGE_BASELINE.baseline_id,
+        MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id,
+    }
+    if uses_matched_comparison:
+        matched_trace_model_client = _create_dynamic_model_client(
+            judge_mode="gemini",
+            dry_run=bool(getattr(args, "dry_run", False)),
+            model_name=model_name,
+            cache_dir=output_dir / "cache" / run_id / comparison_baseline,
+        )
 
     case_records: list[dict[str, Any]] = []
     finding_records: list[dict[str, Any]] = []
     report_rows: list[dict[str, Any]] = []
     quality_records: list[dict[str, Any]] = []
-    naive_report_rows: list[dict[str, Any]] = []
-    naive_skip_reasons: set[str] = set()
+    comparison_report_rows: list[dict[str, Any]] = []
+    comparison_skip_reasons: set[str] = set()
     unsupported_seen: set[str] = set()
 
     for scenario in scenarios:
@@ -372,8 +401,12 @@ async def run_dynamic_benchmark(args: argparse.Namespace) -> dict[str, Any]:
                 )
             )
 
-            naive_reason = _naive_baseline_skip_reason(args, scenario, comparison_baseline)
-            if naive_reason is None:
+            naive_reason = (
+                _naive_baseline_skip_reason(args, scenario, comparison_baseline)
+                if comparison_baseline == NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id
+                else None
+            )
+            if comparison_baseline == NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id and naive_reason is None:
                 baseline_max_steps = _baseline_max_steps_for_scenario(args, scenario)
                 try:
                     naive_result = await run_naive_browser_use_baseline(
@@ -384,11 +417,11 @@ async def run_dynamic_benchmark(args: argparse.Namespace) -> dict[str, Any]:
                         model_name=model_name,
                     )
                 except Exception as exc:  # noqa: BLE001
-                    naive_skip_reasons.add(f"naive baseline failed for {scenario.scenario_id}: {exc}")
+                    comparison_skip_reasons.add(f"naive baseline failed for {scenario.scenario_id}: {exc}")
                 else:
                     naive_run_status = _run_status_for(naive_result.runtime_trace, naive_result.report)
                     unsupported_seen.update(naive_result.report.unsupported_criteria)
-                    naive_report_rows.extend(
+                    comparison_report_rows.extend(
                         _result_rows(
                             run_id=run_id,
                             dataset=dataset,
@@ -401,8 +434,65 @@ async def run_dynamic_benchmark(args: argparse.Namespace) -> dict[str, Any]:
                             scoring=scoring,
                         )
                     )
+            elif comparison_baseline == MATCHED_TRACE_GENERIC_JUDGE_BASELINE.baseline_id:
+                try:
+                    matched_result = await run_matched_trace_generic_judge(
+                        scenario=scenario,
+                        runtime_trace=trace,
+                        runtime_trace_path=trace_path,
+                        output_dir=scenario_raw_dir / "baselines" / MATCHED_TRACE_GENERIC_JUDGE_BASELINE.baseline_id,
+                        requested_criteria=criteria,
+                        model_client=matched_trace_model_client,
+                        run_id=run_id,
+                    )
+                except Exception as exc:  # noqa: BLE001
+                    comparison_skip_reasons.add(f"Baseline 2.0 failed for {scenario.scenario_id}: {exc}")
+                else:
+                    comparison_report_rows.extend(
+                        _result_rows(
+                            run_id=run_id,
+                            dataset=dataset,
+                            scenario=scenario,
+                            report=matched_result.report,
+                            formal_report_path=matched_result.formal_report_path,
+                            runtime_trace_path=matched_result.runtime_trace_path,
+                            run_status=run_status,
+                            analyzer_baseline_id=MATCHED_TRACE_GENERIC_JUDGE_BASELINE.baseline_id,
+                            scoring=scoring,
+                        )
+                    )
+            elif comparison_baseline == MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id:
+                try:
+                    matched_result = await run_matched_global_evidence_ablation(
+                        scenario=scenario,
+                        dataset_id=dataset.dataset_id,
+                        runtime_trace=trace,
+                        runtime_trace_path=trace_path,
+                        output_dir=scenario_raw_dir / "baselines" / MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id,
+                        requested_criteria=criteria,
+                        primary_artifacts=artifacts,
+                        model_client=matched_trace_model_client,
+                        run_id=run_id,
+                    )
+                except Exception as exc:  # noqa: BLE001
+                    comparison_skip_reasons.add(f"Baseline 3.0 failed for {scenario.scenario_id}: {exc}")
+                else:
+                    comparison_report_rows.extend(
+                        _result_rows(
+                            run_id=run_id,
+                            dataset=dataset,
+                            scenario=scenario,
+                            report=matched_result.report,
+                            formal_report_path=matched_result.formal_report_path,
+                            runtime_trace_path=matched_result.runtime_trace_path,
+                            run_status=run_status,
+                            analyzer_baseline_id=MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id,
+                            artifacts=matched_result.artifacts,
+                            scoring=scoring,
+                        )
+                    )
             elif comparison_baseline == NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id:
-                naive_skip_reasons.add(naive_reason)
+                comparison_skip_reasons.add(naive_reason or "naive baseline was not run")
 
             case_record = _case_record(
                 run_id=run_id,
@@ -495,8 +585,8 @@ async def run_dynamic_benchmark(args: argparse.Namespace) -> dict[str, Any]:
     reports_by_baseline: dict[str, list[dict[str, Any]]] = {}
     if report_rows:
         reports_by_baseline[analyzer_baseline_id] = report_rows
-    if naive_report_rows:
-        reports_by_baseline[NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id] = naive_report_rows
+    if comparison_report_rows:
+        reports_by_baseline[comparison_baseline] = comparison_report_rows
     primary_reports_by_baseline = {
         baseline_id: _primary_scored_report_rows(rows, complete_oracle_scenario_ids)
         for baseline_id, rows in reports_by_baseline.items()
@@ -521,7 +611,7 @@ async def run_dynamic_benchmark(args: argparse.Namespace) -> dict[str, Any]:
         completed_baseline_ids,
         selected_dataset,
         comparison_baseline=comparison_baseline,
-        naive_skip_reasons=sorted(naive_skip_reasons),
+        comparison_skip_reasons=sorted(comparison_skip_reasons),
     )
     baseline_comparison_rows = build_baseline_comparison_rows(
         selected_dataset,
@@ -537,14 +627,14 @@ async def run_dynamic_benchmark(args: argparse.Namespace) -> dict[str, Any]:
         selected_dataset,
         primary_reports_by_baseline,
         primary_baseline_id=analyzer_baseline_id,
-        comparison_baseline_id=NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id,
+        comparison_baseline_id=comparison_baseline,
         oracle_rows=primary_oracle_rows,
     )
     attempted_baseline_pairwise_rows = _baseline_pairwise_rows(
         selected_dataset,
         reports_by_baseline,
         primary_baseline_id=analyzer_baseline_id,
-        comparison_baseline_id=NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id,
+        comparison_baseline_id=comparison_baseline,
         oracle_rows=oracle_rows,
     )
     manual_label_rows = build_dynamic_manual_label_rows(
@@ -597,6 +687,25 @@ async def run_dynamic_benchmark(args: argparse.Namespace) -> dict[str, Any]:
     _write_csv(tables_dir / "baseline_status.csv", baseline_rows)
     _write_csv(tables_dir / "model_calls.csv", model_call_records)
     _write_csv(tables_dir / "model_call_verification.csv", model_call_verification_rows)
+    matched_trace_model_summary = (
+        matched_trace_model_client.summary()
+        if matched_trace_model_client is not None
+        else _empty_model_summary(model_name)
+    )
+    matched_trace_model_cost_summary = _model_cost_summary(matched_trace_model_summary, pricing)
+    if comparison_baseline in {
+        MATCHED_TRACE_GENERIC_JUDGE_BASELINE.baseline_id,
+        MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id,
+    }:
+        model_call_filename = (
+            "baseline_2_0_model_calls.csv"
+            if comparison_baseline == MATCHED_TRACE_GENERIC_JUDGE_BASELINE.baseline_id
+            else "baseline_3_0_model_calls.csv"
+        )
+        _write_csv(
+            tables_dir / model_call_filename,
+            list(getattr(matched_trace_model_client, "call_records", [])),
+        )
     _write_csv(tables_dir / "unsupported_incomplete_counts.csv", [unsupported_incomplete])
     _write_csv(
         tables_dir / "criteria_support_matrix.csv",
@@ -616,6 +725,8 @@ async def run_dynamic_benchmark(args: argparse.Namespace) -> dict[str, Any]:
         "model_summary": model_summary,
         "model_cost_summary": model_cost_summary,
         "model_call_verification": model_call_verification_rows,
+        "comparison_model_summary": matched_trace_model_summary if uses_matched_comparison else {},
+        "comparison_model_cost_summary": matched_trace_model_cost_summary if uses_matched_comparison else {},
         "run_id": run_id,
         "scenarios": len(scenarios),
         "available_scenarios": len(dataset.scenarios),
@@ -964,14 +1075,17 @@ def _assert_no_oracle_label_leakage(raw_run_dir: Path, oracle_rows: list[dict[st
         return {"files_scanned": 0, "oracle_snippets": 0, "status": "skipped_no_oracle"}
 
     files = sorted(
-        path
-        for pattern in (
-            "*/criteria/*/prompt.txt",
-            "*/runtime_trace.json",
-            "*/runtime_state_step_*.json",
-            "*/dom_snapshot_step_*.html",
-        )
-        for path in raw_run_dir.glob(pattern)
+        {
+            path
+            for pattern in (
+                "**/criteria/*/prompt.txt",
+                "**/criteria/*/prompt_template.txt",
+                "**/runtime_trace.json",
+                "**/runtime_state_step_*.json",
+                "**/dom_snapshot_step_*.html",
+            )
+            for path in raw_run_dir.glob(pattern)
+        }
     )
     leaks: list[dict[str, str]] = []
     for path in files:
@@ -980,7 +1094,7 @@ def _assert_no_oracle_label_leakage(raw_run_dir: Path, oracle_rows: list[dict[st
         if "expected_status" in lower_text or "expected_evidence" in lower_text:
             leaks.append({"path": str(path), "snippet": "expected_status/expected_evidence key"})
             continue
-        if path.name != "prompt.txt":
+        if path.name not in {"prompt.txt", "prompt_template.txt"}:
             continue
         for snippet in snippets:
             if snippet.lower() in lower_text:
@@ -2824,6 +2938,8 @@ def _ablation_rows(
             variant = f"formal_analyzer_{judge_mode}_judge"
         elif baseline_id == NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id:
             variant = "naive_browser_use_global_audit"
+        elif baseline_id == MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id:
+            variant = "matched_global_evidence_ablation"
         else:
             variant = baseline_id
         rows.append(
@@ -2936,7 +3052,7 @@ def _baseline_status_rows(
     dataset: DynamicBenchmarkDataset,
     *,
     comparison_baseline: str,
-    naive_skip_reasons: list[str],
+    comparison_skip_reasons: list[str],
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     primary_baseline_id = _analyzer_baseline_id(judge_mode)
@@ -2945,8 +3061,12 @@ def _baseline_status_rows(
         HUMAN_ORACLE_BASELINE.baseline_id,
         primary_baseline_id,
     }
-    if comparison_baseline == NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id:
-        status_spec_ids.add(NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id)
+    if comparison_baseline in {
+        NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id,
+        MATCHED_TRACE_GENERIC_JUDGE_BASELINE.baseline_id,
+        MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id,
+    }:
+        status_spec_ids.add(comparison_baseline)
 
     for spec in get_baseline_specs():
         if spec.baseline_id not in status_spec_ids:
@@ -2960,6 +3080,10 @@ def _baseline_status_rows(
                 reason = "computed from formal analyzer Gemini dynamic WCAG prompts"
             elif spec.baseline_id == NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id:
                 reason = "completed single generic browser-use accessibility audit"
+            elif spec.baseline_id == MATCHED_TRACE_GENERIC_JUDGE_BASELINE.baseline_id:
+                reason = "completed generic WCAG judgments over the same runtime trace as FlowA11y"
+            elif spec.baseline_id == MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id:
+                reason = "completed matched global-evidence ablation over the same runtime trace as FlowA11y"
             else:
                 reason = "computed from formal analyzer hybrid Gemini/rules judge"
         elif spec.baseline_id == SYNTHETIC_FIXTURE_BASELINE.baseline_id:
@@ -2981,7 +3105,15 @@ def _baseline_status_rows(
         elif spec.baseline_id == NAIVE_BROWSER_USE_GLOBAL_AUDIT_BASELINE.baseline_id:
             status = "skipped"
             available = False
-            reason = "; ".join(naive_skip_reasons) or "no eligible completed real browser-use http(s) scenarios"
+            reason = "; ".join(comparison_skip_reasons) or "no eligible completed real browser-use http(s) scenarios"
+        elif spec.baseline_id == MATCHED_TRACE_GENERIC_JUDGE_BASELINE.baseline_id:
+            status = "skipped"
+            available = False
+            reason = "; ".join(comparison_skip_reasons) or "no completed runtime traces were available"
+        elif spec.baseline_id == MATCHED_GLOBAL_EVIDENCE_ABLATION_BASELINE.baseline_id:
+            status = "skipped"
+            available = False
+            reason = "; ".join(comparison_skip_reasons) or "no completed runtime traces were available"
         elif spec.command is None and spec.optional:
             status = "skipped"
             available = False

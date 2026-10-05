@@ -1,0 +1,21 @@
+cohort,cohort_id,run,method,method_id,method_role,fixed_v4_rows,native_oracle_labels_available,native_oracle_labels_missing,native_oracle_matches_v4,native_oracle_differs_from_v4
+Original naive comparison,naive,Run 1,FlowA11y,gemini-dynamic-wcag,primary,765,315,450,241,74
+Original naive comparison,naive,Run 1,Naive baseline,naive-browser-use-global-audit,comparator,765,315,450,241,74
+Original naive comparison,naive,Run 2,FlowA11y,gemini-dynamic-wcag,primary,765,315,450,241,74
+Original naive comparison,naive,Run 2,Naive baseline,naive-browser-use-global-audit,comparator,765,315,450,241,74
+Original naive comparison,naive,Run 3,FlowA11y,gemini-dynamic-wcag,primary,765,315,450,241,74
+Original naive comparison,naive,Run 3,Naive baseline,naive-browser-use-global-audit,comparator,765,315,450,241,74
+Original naive comparison,naive,Run 4,FlowA11y,gemini-dynamic-wcag,primary,765,315,450,241,74
+Original naive comparison,naive,Run 4,Naive baseline,naive-browser-use-global-audit,comparator,765,315,450,241,74
+Baseline 2.0 matched trace,baseline_2,Run 1,FlowA11y,gemini-dynamic-wcag,primary,765,315,450,241,74
+Baseline 2.0 matched trace,baseline_2,Run 1,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,765,315,450,241,74
+Baseline 2.0 matched trace,baseline_2,Run 2,FlowA11y,gemini-dynamic-wcag,primary,765,315,450,241,74
+Baseline 2.0 matched trace,baseline_2,Run 2,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,765,315,450,241,74
+Baseline 2.0 matched trace,baseline_2,Run 3,FlowA11y,gemini-dynamic-wcag,primary,765,315,450,241,74
+Baseline 2.0 matched trace,baseline_2,Run 3,Baseline 2.0,baseline-2.0-matched-trace-generic-judge,comparator,765,315,450,241,74
+Baseline 3.0 global-evidence ablation,baseline_3,Run 1,FlowA11y,gemini-dynamic-wcag,primary,765,315,450,241,74
+Baseline 3.0 global-evidence ablation,baseline_3,Run 1,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,765,315,450,241,74
+Baseline 3.0 global-evidence ablation,baseline_3,Run 2,FlowA11y,gemini-dynamic-wcag,primary,765,315,450,241,74
+Baseline 3.0 global-evidence ablation,baseline_3,Run 2,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,765,315,450,241,74
+Baseline 3.0 global-evidence ablation,baseline_3,Run 3,FlowA11y,gemini-dynamic-wcag,primary,765,315,450,241,74
+Baseline 3.0 global-evidence ablation,baseline_3,Run 3,Baseline 3.0,baseline-3.0-matched-global-evidence-ablation,comparator,765,315,450,241,74

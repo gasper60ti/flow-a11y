@@ -1,0 +1,330 @@
+{
+  "dataset_id": "D_dyn_real",
+  "name": "Reviewed-candidate human-oracle real dynamic scenarios",
+  "baseline_kind": "human_oracle",
+  "description": "Real browser-use task scenarios for external-validity validation. Expected results are Codex-generated reviewed-candidate labels derived from browser-use artifacts and accessibility judgement; a human reviewer must approve or revise them before publication.",
+  "label_review_status": "codex_reviewed_candidate_pending_human_approval",
+  "reviewer_policy": "Treat reviewer_id=Codex-R0 labels as machine-assisted provisional labels. Replace or confirm with human reviewer IDs before publication.",
+  "scenarios": [
+    {
+      "scenario_id": "real_govuk_search_subscribe",
+      "scenario_type": "search and footer subscription",
+      "target": "https://www.gov.uk",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://www.gov.uk and search for accessibility, click the first search result, then click Crown copyright and then when it changes click Subscribe.",
+      "scripted_steps": [],
+      "criteria_expected": ["2.4.3", "2.4.7", "4.1.3"],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 10,
+      "expected_results": [
+        {
+          "criterion_id": "2.4.3",
+          "expected_status": "pass",
+          "expected_evidence": ["Provisional label: browser-use reached the subscription page after navigation; no clear focus-order failure was observed in the saved trace."],
+          "notes": "Review screenshots and focus_state_step files before publication."
+        },
+        {
+          "criterion_id": "2.4.7",
+          "expected_status": "warning",
+          "expected_evidence": ["Provisional label: focus evidence ends on the document body on the subscription page, so visible focus cannot be confidently confirmed from artifacts alone."],
+          "notes": "Manual keyboard review required."
+        },
+        {
+          "criterion_id": "4.1.3",
+          "expected_status": "warning",
+          "expected_evidence": ["Provisional label: the task involves a subscription flow where status feedback may be expected, but the artifact set does not conclusively verify live-region announcement behavior."],
+          "notes": "Confirm by submitting the subscription form with assistive technology or accessibility tree inspection."
+        }
+      ]
+    },
+    {
+      "scenario_id": "real_wikipedia_search_navigation",
+      "scenario_type": "search result navigation",
+      "target": "https://www.wikipedia.org",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://www.wikipedia.org and search for accessibility, open the Accessibility article, then use keyboard navigation to reach the first link in the article body.",
+      "scripted_steps": [],
+      "criteria_expected": ["2.1.1", "2.4.3", "2.4.7"],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 10,
+      "expected_results": [
+        {
+          "criterion_id": "2.1.1",
+          "expected_status": "pass",
+          "expected_evidence": ["Provisional label: the saved trace reached the Accessibility article and keyboard focus reached a body link."],
+          "notes": "Review runtime_trace.json and focus_state_step files."
+        },
+        {
+          "criterion_id": "2.4.3",
+          "expected_status": "pass",
+          "expected_evidence": ["Provisional label: focus reached the first link in article content in a logical reading/navigation position."],
+          "notes": "Confirm the full tab sequence manually if used in publication."
+        },
+        {
+          "criterion_id": "2.4.7",
+          "expected_status": "pass",
+          "expected_evidence": ["Provisional label: focused article link was captured and Wikipedia generally exposes native link focus; no artifact shows a clear missing-focus condition."],
+          "notes": "Manual visual review still recommended."
+        }
+      ]
+    },
+    {
+      "scenario_id": "real_w3c_search_result",
+      "scenario_type": "site search and result selection",
+      "target": "https://www.w3.org",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://www.w3.org and search for WCAG, open the first relevant search result, then navigate to the first in-page heading after the main heading.",
+      "scripted_steps": [],
+      "criteria_expected": ["2.1.1", "2.4.3", "2.4.7"],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 10,
+      "expected_results": [
+        {
+          "criterion_id": "2.1.1",
+          "expected_status": "warning",
+          "expected_evidence": ["Provisional label: the run produced navigation evidence, but the scenario was marked challenge_or_bot_page and needs manual confirmation."],
+          "notes": "Do not treat as a final pass/fail until a reviewer repeats the task."
+        },
+        {
+          "criterion_id": "2.4.3",
+          "expected_status": "warning",
+          "expected_evidence": ["Provisional label: the target is expected to have a logical page structure, but the saved run does not conclusively document the in-page heading traversal."],
+          "notes": "Manual keyboard and heading-navigation review required."
+        },
+        {
+          "criterion_id": "2.4.7",
+          "expected_status": "warning",
+          "expected_evidence": ["Provisional label: focus-visible evidence is ambiguous in the browser-use artifacts for this run."],
+          "notes": "Manual visual focus review required."
+        }
+      ]
+    },
+    {
+      "scenario_id": "real_nasa_search_modal",
+      "scenario_type": "search and modal or overlay",
+      "target": "https://www.nasa.gov",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://www.nasa.gov and search for Mars, open the first result, then open any share or menu overlay and close it with the keyboard.",
+      "scripted_steps": [],
+      "criteria_expected": ["2.1.2", "2.4.3", "2.4.7"],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 12,
+      "expected_results": [
+        {
+          "criterion_id": "2.1.2",
+          "expected_status": "warning",
+          "expected_evidence": ["Provisional label: the browser-use run repeatedly failed to close the open navigation overlay with Escape, but the artifact does not prove a strict keyboard trap."],
+          "notes": "Review whether focus can leave the overlay by Tab/Shift+Tab and whether another keyboard close control exists."
+        },
+        {
+          "criterion_id": "2.4.3",
+          "expected_status": "pass",
+          "expected_evidence": ["Provisional label: the run reached the target result page and active global navigation trigger without clear evidence of illogical focus order."],
+          "notes": "Manual tab-sequence review recommended."
+        },
+        {
+          "criterion_id": "2.4.7",
+          "expected_status": "fail",
+          "expected_evidence": ["Provisional label: the focused global navigation trigger remained active across closing attempts, and the available artifacts do not show a reliable visible focus indicator."],
+          "notes": "Confirm against screenshot_step_7.png through screenshot_step_11.png."
+        }
+      ]
+    },
+    {
+      "scenario_id": "real_bbc_search_media",
+      "scenario_type": "search and media playback",
+      "target": "https://www.bbc.com",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://www.bbc.com and search for climate, open a video or audio result if available, then start playback and inspect whether captions or transcript controls are present.",
+      "scripted_steps": [],
+      "criteria_expected": ["1.2.2", "1.2.3", "2.1.1"],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 12,
+      "expected_results": [
+        {
+          "criterion_id": "1.2.2",
+          "expected_status": "incomplete",
+          "expected_evidence": ["Provisional label: the run reached a video result but a registration overlay prevented reliable playback and captions verification."],
+          "notes": "Repeat manually or with an account-free media target."
+        },
+        {
+          "criterion_id": "1.2.3",
+          "expected_status": "incomplete",
+          "expected_evidence": ["Provisional label: media playback was not reliably reached, so audio description or media alternative evidence is insufficient."],
+          "notes": "Repeat with a stable media page."
+        },
+        {
+          "criterion_id": "2.1.1",
+          "expected_status": "warning",
+          "expected_evidence": ["Provisional label: the registration overlay blocked the video workflow and resisted normal dismissal in the trace, suggesting a possible keyboard workflow barrier."],
+          "notes": "Manual review should determine whether the overlay and player controls are fully keyboard operable."
+        }
+      ]
+    },
+    {
+      "scenario_id": "real_mdn_search_focus",
+      "scenario_type": "developer documentation search",
+      "target": "https://developer.mozilla.org",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://developer.mozilla.org and search for aria live, open the first result, then use keyboard navigation to move through the page table of contents.",
+      "scripted_steps": [],
+      "criteria_expected": ["2.1.1", "2.4.3", "2.4.7"],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 10,
+      "expected_results": [
+        {
+          "criterion_id": "2.1.1",
+          "expected_status": "pass",
+          "expected_evidence": ["Provisional label: browser-use reached the MDN ARIA live regions page and keyboard focus moved through table-of-contents links."],
+          "notes": "Review focus_state_step_7.json through focus_state_step_9.json."
+        },
+        {
+          "criterion_id": "2.4.3",
+          "expected_status": "pass",
+          "expected_evidence": ["Provisional label: table-of-contents focus moved through adjacent in-page links in a logical order."],
+          "notes": "Manual confirmation recommended."
+        },
+        {
+          "criterion_id": "2.4.7",
+          "expected_status": "pass",
+          "expected_evidence": ["Provisional label: MDN table-of-contents links received focus during keyboard navigation; no saved artifact conclusively shows missing visible focus."],
+          "notes": "Manual visual focus check recommended."
+        }
+      ]
+    },
+    {
+      "scenario_id": "real_usps_search_status",
+      "scenario_type": "search and status update",
+      "target": "https://www.usps.com",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://www.usps.com and search for zip code, open the first relevant result, then submit an empty or invalid lookup form and observe any status or error message.",
+      "scripted_steps": [],
+      "criteria_expected": ["3.3.1", "3.3.3", "4.1.3"],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 12,
+      "expected_results": [
+        {
+          "criterion_id": "3.3.1",
+          "expected_status": "incomplete",
+          "expected_evidence": ["Provisional label: the saved trace appears to remain on a USPS search results page and does not conclusively show invalid form submission evidence."],
+          "notes": "Repeat with a deterministic form URL before claiming error-identification results."
+        },
+        {
+          "criterion_id": "3.3.3",
+          "expected_status": "incomplete",
+          "expected_evidence": ["Provisional label: no reliable invalid-form error suggestion evidence was captured in the current artifact set."],
+          "notes": "Repeat with a deterministic form URL before publication."
+        },
+        {
+          "criterion_id": "4.1.3",
+          "expected_status": "incomplete",
+          "expected_evidence": ["Provisional label: status message behavior could not be confirmed because the invalid lookup form state was not reliably reached."],
+          "notes": "Repeat with accessibility tree and live-region inspection."
+        }
+      ]
+    },
+    {
+      "scenario_id": "real_openai_search_navigation",
+      "scenario_type": "search and navigation consistency",
+      "target": "https://openai.com",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://openai.com and search for accessibility, open a relevant result if search is available, then navigate through the header menu using keyboard controls.",
+      "scripted_steps": [],
+      "criteria_expected": ["2.1.1", "2.4.3", "3.2.3"],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 12,
+      "expected_results": [
+        {
+          "criterion_id": "2.1.1",
+          "expected_status": "warning",
+          "expected_evidence": ["Provisional label: the run produced partial keyboard-navigation evidence but ended incomplete."],
+          "notes": "Manual repeat needed."
+        },
+        {
+          "criterion_id": "2.4.3",
+          "expected_status": "warning",
+          "expected_evidence": ["Provisional label: the header-menu focus-order evidence is partial and should not be treated as a final pass/fail."],
+          "notes": "Manual repeat needed."
+        },
+        {
+          "criterion_id": "3.2.3",
+          "expected_status": "incomplete",
+          "expected_evidence": ["Provisional label: the navigation-consistency task did not complete sufficiently to judge consistent navigation."],
+          "notes": "Manual repeat needed."
+        }
+      ]
+    },
+    {
+      "scenario_id": "real_youtube_search_captions",
+      "scenario_type": "media search and captions",
+      "target": "https://www.youtube.com",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://www.youtube.com and search for accessibility tutorial, open the first playable result, then start playback and check whether captions can be enabled.",
+      "scripted_steps": [],
+      "criteria_expected": ["1.2.2", "2.1.1", "2.4.7"],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 12,
+      "expected_results": [
+        {
+          "criterion_id": "1.2.2",
+          "expected_status": "incomplete",
+          "expected_evidence": ["Provisional label: the run was marked challenge_or_bot_page and did not provide stable captions-control evidence."],
+          "notes": "Manual repeat with a known public video is required."
+        },
+        {
+          "criterion_id": "2.1.1",
+          "expected_status": "warning",
+          "expected_evidence": ["Provisional label: YouTube playback and captions controls are keyboard-sensitive, but this run did not provide enough stable evidence for final judgement."],
+          "notes": "Manual review required."
+        },
+        {
+          "criterion_id": "2.4.7",
+          "expected_status": "warning",
+          "expected_evidence": ["Provisional label: focus-visible evidence is inconclusive because the scenario was challenge-limited."],
+          "notes": "Manual visual focus review required."
+        }
+      ]
+    },
+    {
+      "scenario_id": "real_github_search_modal",
+      "scenario_type": "search and dialog interaction",
+      "target": "https://github.com",
+      "interaction_type": "browser_use_task",
+      "task_description": "Open https://github.com and search for accessibility, open a repository result, then open any menu or dialog on the repository page and close it with Escape.",
+      "scripted_steps": [],
+      "criteria_expected": ["2.1.2", "2.4.3", "2.4.7"],
+      "baseline_kind": "human_oracle",
+      "labels_pending": false,
+      "max_steps": 12,
+      "expected_results": [
+        {
+          "criterion_id": "2.1.2",
+          "expected_status": "pass",
+          "expected_evidence": ["Provisional label: the saved GitHub artifact shows a focused branch/menu control and no clear evidence of trapped keyboard focus."],
+          "notes": "Review whether the opened control can be dismissed with Escape."
+        },
+        {
+          "criterion_id": "2.4.3",
+          "expected_status": "pass",
+          "expected_evidence": ["Provisional label: the saved repository page focus target is consistent with normal repository navigation order."],
+          "notes": "Manual tab-sequence review recommended."
+        },
+        {
+          "criterion_id": "2.4.7",
+          "expected_status": "pass",
+          "expected_evidence": ["Provisional label: the focused GitHub control includes focus-visible class evidence in focus_state artifacts."],
+          "notes": "Manual visual review recommended."
+        }
+      ]
+    }
+  ]
+}

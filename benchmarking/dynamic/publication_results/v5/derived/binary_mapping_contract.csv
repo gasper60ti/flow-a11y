@@ -1,0 +1,6 @@
+original_status,binary_decision,not_trigger_reason
+FAIL,TRIGGER,
+WARNING,NOT_TRIGGER,weak_signal
+PASS,NOT_TRIGGER,assessed_pass
+NOT_APPLICABLE,NOT_TRIGGER,not_applicable
+INCOMPLETE,NOT_TRIGGER,insufficient_evidence

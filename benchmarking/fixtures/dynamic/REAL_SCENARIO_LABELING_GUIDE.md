@@ -1,15 +1,18 @@
 # Real Dynamic Scenario Labeling Guide
 
-`real_scenarios.json` contains the exact public-web scenario definitions used
-by the saved v4 publication run. `real_oracle_labels.csv` contains the complete
-855-row author-reviewed oracle used only for metrics.
+`real_scenarios.json` contains the public-web scenario definitions associated
+with the saved V5 repeated-run inputs. `real_oracle_labels.csv` contains the
+complete 855-row anonymized oracle; the V5 binary report evaluates its fixed
+765-row primary frame.
 
-`real_scenarios_reviewed_latest.json` preserves later wording changes that were
-not used to compute the bundled v4 tables.
+`real_scenarios.reviewed.json` and `real_scenarios_reviewed_latest.json`
+preserve reviewed wording changes that are not used to construct the fixed V5
+frame.
 
-## Review Inputs
+## Inputs for a future full-workspace review
 
-For each scenario, inspect:
+The compact V5 reviewer artifact intentionally omits raw browser material. In a
+full research workspace, inspect the following files for each scenario:
 
 - `benchmarking/dynamic/results_real/raw/run_1/<scenario_id>/runtime_trace.json`
 - `benchmarking/dynamic/results_real/raw/run_1/<scenario_id>/scenario_result.json`
